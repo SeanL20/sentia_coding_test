@@ -1,5 +1,12 @@
 FROM ruby:2.5.0
 RUN apt-get update -qq && apt-get install -y nodejs postgresql-client
+RUN apt-get install -y build-essential libpq-dev nodejs
+
+#Install Nodejs with NPM
+RUN apt-get update && apt-get install -y curl
+RUN curl -sL https://deb.nodesource.com/setup_10.x | bash -
+RUN apt-get update && apt-get install -y nodejs
+
 WORKDIR /myapp
 COPY Gemfile /myapp/Gemfile
 COPY Gemfile.lock /myapp/Gemfile.lock
