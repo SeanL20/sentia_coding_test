@@ -1,5 +1,7 @@
 {
   "name": "sterning_coding_test",
   "private": true,
-  "dependencies": {}
+  "dependencies": {
+    "bootstrap": "^4.6.0"
+  }
 }
