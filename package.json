@@ -2,6 +2,7 @@
   "name": "sterning_coding_test",
   "private": true,
   "dependencies": {
-    "bootstrap": "^4.6.0"
+    "bootstrap": "^4.6.0",
+    "jquery": "^3.6.0"
   }
 }
