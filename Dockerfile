@@ -1,8 +1,11 @@
-FROM ruby:2.5
+FROM ruby:2.5.0
 RUN apt-get update -qq && apt-get install -y nodejs postgresql-client
 WORKDIR /myapp
 COPY Gemfile /myapp/Gemfile
 COPY Gemfile.lock /myapp/Gemfile.lock
+RUN gem update --system
+RUN gem install bundler -v 2.0.1
+ENV BUNDLER_VERSION 2.0.1
 RUN bundle install
 COPY . /myapp
 
