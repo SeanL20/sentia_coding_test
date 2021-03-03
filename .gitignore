@@ -72,6 +72,7 @@ yarn-debug.log*
 /storage/*
 !/storage/.keep
 
+package-lock.json
 Gemfile.lock
 
 db/schema.rb
