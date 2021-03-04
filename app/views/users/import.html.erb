@@ -31,5 +31,11 @@
         <%= submit_tag "Import CSV", class: "btn btn-primary" %>
       <% end %>
     </div>
+
+    <% if User.any? %>
+      <div class="col-12 mt-4">
+        <%= link_to "Vue Table", table_users_path, class: 'btn btn-success text-white' %>
+      </div>
+    <% end %>
   </div>
 </div>
