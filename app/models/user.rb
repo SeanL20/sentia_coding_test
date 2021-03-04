@@ -79,4 +79,16 @@ class User < ApplicationRecord
   def full_name
     self.first_name + ' ' + self.last_name
   end
+
+  def self.search(search_data)
+    where(['first_name ilike :query',
+      'last_name ilike :query',
+      'species ilike :query',
+      'gender ilike :query',
+      'weapon ilike :query',
+      'vehicle ilike :query',
+      'affiliations.title ilike :query',
+      'locations.title ilike :query'].join(' OR '), {query: "%#{search_data}%" }
+    ).references(:affiliations, :locations)
+  end
 end
