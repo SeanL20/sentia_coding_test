@@ -1,0 +1,41 @@
+<%= content_for :js_area do %>
+  <script>
+    $('#inputGroupFile01').on('change', function(){
+      if($('#inputGroupFile01').val() != ""){
+        var file_name_array = $('#inputGroupFile01').val().split('\\');
+        var file_name = file_name_array[file_name_array.length-1]
+        $('#inputGroupFileLabel').text(file_name);
+      }else{
+        $('#inputGroupFileLabel').text("Choose file");
+      }
+    });
+  </script>
+<% end %>
+
+<div class="container mt-4" id="app">
+  <div class="row">
+    <div class="col-12">
+      <h1>Import Data</h1>
+    </div>
+    <div class="col-12 mt-4">
+      <%= form_tag csv_import_users_path, multipart: true do %>
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text">Upload</span>
+          </div>
+          <div class="custom-file">
+            <%= file_field_tag :file, class: "custom-file-input", id: "inputGroupFile01" %>
+            <label class="custom-file-label" for="inputGroupFile01" id="inputGroupFileLabel">Choose file</label>
+          </div>
+        </div>
+        <%= submit_tag "Import CSV", class: "btn btn-primary" %>
+      <% end %>
+    </div>
+
+    <% if User.any? %>
+      <div class="col-12 mt-4">
+        <%= link_to "Vue Table", table_users_path, class: 'btn btn-success text-white' %>
+      </div>
+    <% end %>
+  </div>
+</div>

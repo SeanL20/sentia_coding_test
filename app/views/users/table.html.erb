@@ -1,0 +1,119 @@
+<%= content_for :js_area do %>
+  <script>
+    var vueapp = new Vue({
+      el: '#app',
+      data: {
+        search: "<%= params[:search].blank? ? "nil" : params[:search] %>",
+        page: "<%= params[:page].blank? ? "nil" : params[:page] %>",
+        sort_column: "<%= params[:sort_column].blank? ? "nil" : params[:sort_column] %>",
+        sort_style: "<%= params[:sort_style].blank? ? "nil" : params[:sort_style] %>"
+      },
+      mounted: function(){
+        if (this.search != "nil") {
+          $('#search_text').val(this.search)
+        }
+      },
+      methods: {
+        page_number_click: function(page_num){
+          this.page = page_num;
+          this.change_page_params();
+        },
+        search_text_fnc: function(){
+          if ($('#search_text').val() != '') {
+            this.search = $('#search_text').val();
+          }else{
+            this.search = "nil";
+          }
+          this.change_page_params();
+        },
+        sort_column_fnc: function(column_name){
+          if (column_name != this.sort_column) {
+            this.sort_style = 'asc';
+          }else{
+            if (this.sort_style == 'nil'|| this.sort_style == 'desc') {
+              this.sort_style = 'asc';
+            } else if (this.sort_style == 'asc') {
+              this.sort_style = 'desc';
+            }
+          }
+          this.sort_column = column_name;
+          this.change_page_params();
+        },
+        change_page_params: function(){
+          window.location.href = "<%= url_for(controller: :users, action: :table) %>/"+this.search+"/"+this.page+"/"+this.sort_column+"/"+this.sort_style+"/"
+        }
+      }
+    });
+  </script>
+<% end %>
+
+<%= content_for :css_area do %>
+  <style>
+    .buttons {
+      cursor: pointer;
+    }
+  </style>
+<% end %>
+
+<div class="container mt-4" id="app">
+  <div class="row">
+    <div class="col-12">
+      <h1>Import Data</h1>
+    </div>
+    <div class="col-12 mt-1">
+      <div class="row">
+        <div class="col-4"></div>
+        <div class="col-4"></div>
+        <div class="col-4">
+          <div class="input-group mb-3">
+            <input type="text" id="search_text" class="form-control" aria-label="Search" aria-describedby="button-addon2">
+            <div class="input-group-append">
+              <button class="btn btn-outline-secondary" type="button" id="button-addon2" v-on:click="search_text_fnc" >Search</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 mt-4">
+      <table class="table table-hover">
+        <thead>
+          <th class="buttons" v-on:click="sort_column_fnc('name')">Name</th>
+          <th class="buttons" v-on:click="sort_column_fnc('location')">Location</th>
+          <th class="buttons" v-on:click="sort_column_fnc('species')">Species</th>
+          <th class="buttons" v-on:click="sort_column_fnc('gender')">Gender</th>
+          <th class="buttons" v-on:click="sort_column_fnc('affiliations')">Affiliations</th>
+          <th class="buttons" v-on:click="sort_column_fnc('weapon')">Weapon</th>
+          <th class="buttons" v-on:click="sort_column_fnc('vehicle')">Vehicle</th>
+        </thead>
+        <tbody>
+          <% @users.each do |user| %>
+            <tr>
+              <td><%= user["full_name"] %></td>
+              <td><%= user["location"] %></td>
+              <td><%= user["species"] %></td>
+              <td><%= user["gender"] %></td>
+              <td><%= user["affiliations"] %></td>
+              <td><%= user["weapon"] %></td>
+              <td><%= user["vehicle"] %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+    <div class="col-12 mt-1">
+      <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+          <% if @prev_btn_display %>
+            <li class="page-item"><a class="page-link" href="#" v-on:click="page_number_click(<%= @current_page-1 %>)">Previous</a></li>
+          <% end %>
+          <% for i in 1..@max_page %>
+            <li class="page-item <%= @current_page == i ? 'active' : '' %>"><a class="page-link" href="#" v-on:click="page_number_click(<%= i %>)"><%= i %></a></li>
+          <% end %>
+          <% if @next_btn_display %>
+            <li class="page-item"><a class="page-link" href="#" v-on:click="page_number_click(<%= @current_page+1 %>)">Next</a></li>
+          <% end %>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
