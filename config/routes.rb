@@ -7,4 +7,6 @@ Rails.application.routes.draw do
 			post :csv_import
   	end
   end
+
+  root 'users#import'
 end
